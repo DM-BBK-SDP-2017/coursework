@@ -73,7 +73,7 @@
         <entry file="file://$PROJECT_DIR$/SML_Scala/src/sml/Translator.scala">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="630">
-              <caret line="42" column="34" lean-forward="true" selection-start-line="42" selection-start-column="34" selection-end-line="42" selection-end-column="34" />
+              <caret line="42" column="38" lean-forward="false" selection-start-line="42" selection-start-column="38" selection-end-line="42" selection-end-column="38" />
               <folding />
             </state>
           </provider>
@@ -843,7 +843,7 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1486817061311</updated>
-      <workItem from="1486817062743" duration="20044000" />
+      <workItem from="1486817062743" duration="20067000" />
     </task>
     <task id="LOCAL-00001" summary="Better late than never...">
       <created>1486845156934</created>
@@ -866,11 +866,18 @@
       <option name="project" value="LOCAL" />
       <updated>1486898605943</updated>
     </task>
-    <option name="localTasksCounter" value="4" />
+    <task id="LOCAL-00004" summary="Test commit">
+      <created>1486899719413</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1486899719413</updated>
+    </task>
+    <option name="localTasksCounter" value="5" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="20044000" />
+    <option name="totallyTimeSpent" value="20067000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-2490" y="-632" width="1368" height="1234" extended-state="0" />
@@ -1082,7 +1089,7 @@
     <entry file="file://$PROJECT_DIR$/SML_Scala/src/sml/Translator.scala">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="630">
-          <caret line="42" column="34" lean-forward="true" selection-start-line="42" selection-start-column="34" selection-end-line="42" selection-end-column="34" />
+          <caret line="42" column="38" lean-forward="false" selection-start-line="42" selection-start-column="38" selection-end-line="42" selection-end-column="38" />
           <folding />
         </state>
       </provider>
