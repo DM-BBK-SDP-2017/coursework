@@ -40,7 +40,7 @@ class Translator(fileName: String) {
             program = program :+ BnzInstruction(fields(0), fields(2).toInt, fields(3))
           case x =>
             println(s"Unknown instruction $x")
-        } // test branch // reflection
+        } // test branch // reflection 2
       }
     }
     new Machine(labels, program)
