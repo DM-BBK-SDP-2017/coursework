@@ -1,5 +1,13 @@
 package sml
 
+import scala.collection.mutable
+
+//import scala.reflect.runtime.universe._
+import java.lang.reflect._
+import java.util._
+import collection.JavaConverters._
+
+
 /*
  * The translator of a <b>S</b><b>M</b>al<b>L</b> program.
  */
@@ -11,6 +19,23 @@ class Translator(fileName: String) {
   private final val SUB = "sub"
   private final val OUT = "out"
   private final val DIV = "div"
+
+  /**
+    * Method required for Scala reflection object instantiation
+    */
+  /*def getObject(className: String): Instruction = {
+    val mirror = runtimeMirror(getClass.getClassLoader)
+    val module = mirror.staticModule(className)
+    mirror.reflectModule(module).instance.asInstanceOf[AddInstruction]
+  }*/
+  /*def getObject(str: String, fields: List[Any]): Instruction = {
+    val constParams = for (f <- fields) yield f.getClass
+    val objConst = java.lang.Class.forName(str).getConstructor(constParams)
+    return objConst.newInstance()
+    //va; Class.forName(str).newInstance(fields)
+  }*/
+
+
   /**
     * translate the small program in the file into lab (the labels) and prog (the program)
     */
@@ -25,7 +50,8 @@ class Translator(fileName: String) {
         labels.add(fields(0))
         fields(1) match {
           case ADD =>
-            program = program :+ AddInstruction(fields(0), fields(2).toInt, fields(3).toInt, fields(4).toInt)
+            //program = program :+ JavaReflectionHelper.getObject("sml.AddInstruction", List(fields(0), fields(2).toInt, fields(3).toInt, fields(4).toInt).asJava)
+            program = program :+ JavaReflectionHelper.getObject("sml.AddInstruction", List(fields(0), fields(2).toInt, fields(3).toInt, fields(4).toInt).asJava)
           case LIN =>
             program = program :+ LinInstruction(fields(0), fields(2).toInt, fields(3).toInt)
           case SUB =>
