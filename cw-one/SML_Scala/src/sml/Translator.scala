@@ -20,40 +20,25 @@ class Translator(fileName: String) {
     var program = m.prog
     import scala.io.Source
     val lines = Source.fromFile(fileName).getLines
+
+    // Begin for loop to add instructions to 'program' array
+
     for (line <- lines) {
       val fields = line.split(" ")
 
       if (fields.length > 0) {
-        val className = "sml." + fields(1).charAt(0).toUpper + fields(1).substring(1) + "Instruction"
-        println(className)
-        val inst = Class.forName(className).getConstructor(classOf[Array[String]])
-        //println("consts length " + inst.length)
-        //println("fields length " + fields.length)
-        //println(inst.newInstance(fields).asInstanceOf[Instruction])
-        //program = program :+ new OutInstruction(Array[String]("f5", "out", "20"))
-        //for (field <- fields) {println(field)}
-        program = program :+ inst.newInstance(fields).asInstanceOf[Instruction]
-        //println(" program length " + program.length)
+        labels.add(fields(0))
 
-        /*fields(1) match {
-          case ADD =>
-            //program = program :+ JavaReflectionHelper.getObject("sml.AddInstruction", javaFields)
-            program = program :+ ScalaReflectionHelper.getInstruction("sml.AddInstruction", fields)
-          case LIN =>
-            program = program :+ LinInstruction(fields(0), fields(2).toInt, fields(3).toInt)
-          case SUB =>
-            program = program :+ SubInstruction(fields(0), fields(2).toInt, fields(3).toInt, fields(4).toInt)
-          case MUL =>
-            program = program :+ MulInstruction(fields(0), fields(2).toInt, fields(3).toInt, fields(4).toInt)
-          case DIV =>
-            program = program :+ DivInstruction(fields(0), fields(2).toInt, fields(3).toInt, fields(4).toInt)
-          case OUT =>
-            program = program :+ OutInstruction(fields(0), fields(2).toInt)
-          case BNZ =>
-            program = program :+ BnzInstruction(fields(0), fields(2).toInt, fields(3))
-          case x =>
-            println("Unknown instruction $x")
-        } // test branch // reflection 2*/
+        // retrieve op code and use to derive Class to instantiate
+
+        // NOTE TO MARKER - Obviously there is an assumption here that any new instructions have the same format as the
+        // ones give in the original spec e.g. instruction name
+
+        val className = fields(1).charAt(0).toUpper + fields(1).substring(1) + "Instruction"
+        val inst = Class.forName(className).getConstructor(classOf[Array[String]])
+
+        program = program :+ inst.newInstance(fields).asInstanceOf[Instruction]
+
       }
     }
     new Machine(labels, program)

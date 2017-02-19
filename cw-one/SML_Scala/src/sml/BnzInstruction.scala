@@ -15,12 +15,8 @@ class BnzInstruction (label: String, opcode: String, register: Int, altInst: Str
 
 
   override def execute(m: Machine) = {
-    for (label <- m.labels.labels) {println("label " + label)}
-    //val nextInst = m.labels(m.pc + 1)
-   // val regVal = m.regs(register)
 
-    println(m.labels.labels.length)
-   // if (m.regs(register) != 0) { m.pc = m.labels.labels.indexOf(altInst) }
+    if (m.regs(register) != 0) { m.pc = m.labels.labels.indexOf(altInst) }
 
     }
 
