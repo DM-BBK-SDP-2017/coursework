@@ -6,6 +6,11 @@ package sml
 class BnzInstruction (label: String, opcode: String, register: Int, altInst: String)
   extends Instruction(label, opcode) {
 
+  // one arg constructor
+
+  def this(array: Array[String]) {
+    this(array(0), array(1), array(2).toInt, array(3).toInt, array(4).toInt)
+  }
 
 
   override def execute(m: Machine) = {

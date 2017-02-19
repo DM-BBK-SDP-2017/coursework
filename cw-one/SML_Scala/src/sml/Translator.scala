@@ -1,10 +1,11 @@
 package sml
 
+import java.util
+
 import scala.collection.mutable
 
 //import scala.reflect.runtime.universe._
-import java.lang.reflect._
-import java.util._
+//import java.lang.reflect._
 import collection.JavaConverters._
 
 
@@ -23,7 +24,7 @@ class Translator(fileName: String) {
   /**
     * Method required for Scala reflection object instantiation
     */
-  /*def getObject(className: String): Instruction = {
+  /*def getObject(className: String, list: List[Any]): Instruction = {
     val mirror = runtimeMirror(getClass.getClassLoader)
     val module = mirror.staticModule(className)
     mirror.reflectModule(module).instance.asInstanceOf[AddInstruction]
@@ -46,12 +47,15 @@ class Translator(fileName: String) {
     val lines = Source.fromFile(fileName).getLines
     for (line <- lines) {
       val fields = line.split(" ")
+      val javaFields: java.util.ArrayList[String] = new util.ArrayList[String]()
+      fields.foreach(f => javaFields.add(f))
+         // for (f <- fields) {javaFields.append(f)}
       if (fields.length > 0) {
         labels.add(fields(0))
         fields(1) match {
           case ADD =>
-            //program = program :+ JavaReflectionHelper.getObject("sml.AddInstruction", List(fields(0), fields(2).toInt, fields(3).toInt, fields(4).toInt).asJava)
-            program = program :+ JavaReflectionHelper.getObject("sml.AddInstruction", List(fields(0), fields(2).toInt, fields(3).toInt, fields(4).toInt).asJava)
+            //program = program :+ JavaReflectionHelper.getObject("sml.AddInstruction", javaFields)
+            program = program :+ ScalaReflectionHelper.getInstruction("sml.AddInstruction", fields)
           case LIN =>
             program = program :+ LinInstruction(fields(0), fields(2).toInt, fields(3).toInt)
           case SUB =>
@@ -65,7 +69,7 @@ class Translator(fileName: String) {
           case BNZ =>
             program = program :+ BnzInstruction(fields(0), fields(2).toInt, fields(3))
           case x =>
-            println(s"Unknown instruction $x")
+            println("Unknown instruction $x")
         } // test branch // reflection 2
       }
     }
