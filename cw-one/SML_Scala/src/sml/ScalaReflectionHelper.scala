@@ -14,6 +14,7 @@ class ScalaReflectionHelper {
 object ScalaReflectionHelper {
   def getInstruction(str: String, array: Array[String]): Instruction = {
 
+
     val inst = Class.forName(str).getConstructors
     inst(0).newInstance(array).asInstanceOf[Instruction]
 
