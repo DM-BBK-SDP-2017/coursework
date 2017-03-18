@@ -1,0 +1,8 @@
+# GITIGNORE
+
+*.idea
+*.iml
+*.DS_Store
+**/target/
+**/ad hoc exercises/**
+**/testjavadoc/**
