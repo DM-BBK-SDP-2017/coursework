@@ -8,9 +8,7 @@ class AddInstruction(label: String, op: String, val result: Int, val op1: Int, v
   // One arg constructor
 
 
-  def this(array: Array[String]) {
-    this(array(0), array(1), array(2).toInt, array(3).toInt, array(4).toInt)
-  }
+
 
 
 

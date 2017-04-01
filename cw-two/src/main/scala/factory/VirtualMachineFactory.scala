@@ -12,7 +12,7 @@ import vm.{VirtualMachine, VirtualMachineParser}
   */
 object VirtualMachineFactory {
   // TODO
-  def byteCodeFactory: ByteCodeFactory = new ByteCodeFactoryImpl
+  def byteCodeFactory: ByteCodeFactory = ByteCodeFactoryImpl
 
   // TODO
   def vendorParser: ProgramParser = new ProgramParserImpl
@@ -24,5 +24,5 @@ object VirtualMachineFactory {
   def virtualMachineParser: VirtualMachineParser = new VirtualMachineParserImpl
 
   // TODO
-  def virtualMachine: VirtualMachine = new VirtualMachineImpl
+  def virtualMachine: VirtualMachine = new VirtualMachineImpl(Vector[Int]())
 }

@@ -1,12 +1,13 @@
 package impl
 
-import bc.ByteCode
+import bc.{ByteCode, ByteCodeValues}
+import factory.VirtualMachineFactory
 import vm.VirtualMachine
 
 /**
   * Created by dannymadell on 18/03/2017.
   */
-class VirtualMachineImpl extends VirtualMachine {
+class VirtualMachineImpl(var stack: Vector[Int]) extends VirtualMachine with ByteCodeValues {
   /**
     * Executes a vector of bytecodes.
     *
@@ -17,7 +18,17 @@ class VirtualMachineImpl extends VirtualMachine {
     * @param bc a vector of bytecodes
     * @return a new virtual machine
     */
-  override def execute(bc: Vector[ByteCode]): VirtualMachine = ???
+  override def execute(bc: Vector[ByteCode]): VirtualMachine = {
+    //bc.foreach(x => executeOne(x))
+    var returnVm: VirtualMachine = VirtualMachineFactory.virtualMachine
+    if (bc.isEmpty) {returnVm = this}
+    else if (!bc.isEmpty) {
+      returnVm = executeOne(bc)._2
+    }
+
+    returnVm
+
+  }
 
   /**
     * Executes the next bytecode in the vector of bytecodes.
@@ -31,7 +42,10 @@ class VirtualMachineImpl extends VirtualMachine {
     * @param bc the vector of bytecodes
     * @return a tuple of a new vector of bytecodes and virtual machine
     */
-  override def executeOne(bc: Vector[ByteCode]): (Vector[ByteCode], VirtualMachine) = ???
+  override def executeOne(bc: Vector[ByteCode]): (Vector[ByteCode], VirtualMachine) = {
+    (bc.drop(1), bc.head.execute(this))
+
+  }
 
   /**
     * Pushes an integer value onto the virtual machine stack.
@@ -39,7 +53,12 @@ class VirtualMachineImpl extends VirtualMachine {
     * @param value the integer to push
     * @return a new virtual machine with the integer `value` pushed
     */
-  override def push(value: Int): VirtualMachine = ???
+  override def push(value: Int): VirtualMachine = {
+    stack.+:(value)
+    this
+
+
+  }
 
   /**
     * Pops an integer value off of the virtual machine stack.
@@ -47,8 +66,16 @@ class VirtualMachineImpl extends VirtualMachine {
     * @return (i, vm), where i is the integer popped and vm is the
     *         new virtual machine
     */
-  override def pop(): (Int, VirtualMachine) = ???
+  override def pop(): (Int, VirtualMachine) = {
 
+    //Don't like this, not very idiomatic to scala?
+    val returnInt = stack.head
+    stack.drop(1)
+    (returnInt, this)
+
+  }
+
+    //(stack(0), VirtualMachineFactory.virtualMachine)
   /**
     * Returns the state of the virtual machine stack.
     *
@@ -56,5 +83,5 @@ class VirtualMachineImpl extends VirtualMachine {
     *
     * @return the state of the stack
     */
-  override def state: Vector[Int] = ???
+  override def state: Vector[Int] = stack
 }

@@ -78,7 +78,7 @@ class ProgramParserImpl extends ProgramParser {
       """iconst\s(\d+)""".r
 
     for (line <- fileLines) {
-      line match {
+      line match { // not all here
         case "isub" => instructionList = instructionList :+ new vendor.Instruction("isub", Vector[Int]());
         case "irem" => instructionList = instructionList :+ new vendor.Instruction("irem", Vector[Int]());
         case "ineg" => instructionList = instructionList :+ new vendor.Instruction("ineg", Vector[Int]());

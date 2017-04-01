@@ -12,7 +12,7 @@ class Irem extends ByteCode {
     * will set this to the bytecode corresponding to the name of the
     * bytecode in [[ByteCodeValues]]
     */
-  override val code: Byte = _
+  override val code: Byte = bytecode("irem")
 
   /**
     * Returns a new [[VirtualMachine]] after executing this bytecode operation.

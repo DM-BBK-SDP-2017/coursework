@@ -9,9 +9,6 @@ class BnzInstruction (label: String, opcode: String, register: Int, altInst: Str
   // one arg constructor f5 bnz 20 f3
 
 
-  def this(array: Array[String]) {
-    this(array(0), array(1), array(2).toInt, array(3))
-  }
 
 
   override def execute(m: Machine) = {

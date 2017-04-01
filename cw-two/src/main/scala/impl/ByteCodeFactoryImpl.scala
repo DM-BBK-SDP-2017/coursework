@@ -23,9 +23,9 @@ object ByteCodeFactoryImpl extends ByteCodeFactory with ByteCodeValues {
     * @param args an optional integer argument (depends on bytecode)
     * @return a new bytecode object
     */
-  override def make(byte: Byte, args: Int*): ByteCode = {
+  override def make(byte: Byte, args: Int*): ByteCode = (byte, args) match {
 
-      case (1, args)  => new Iconst(args)
+      case (1, args)  => new Iconst(args(0))
       case (2, _)     => new Iadd
       case (3, _)     => new Isub
       case (4, _)     => new Imul

@@ -42,11 +42,24 @@ class Translator(fileName: String) {
 
         // use derived classname to get constructor that accepts a Array[String]
 
-        val inst = Class.forName(className).getConstructor(classOf[Array[String]])
+        val inst = Class.forName(className).getConstructors()
+
+
+        var instanceArgs: Array[Object] = new Array[Object](0)
+
+        for (f <- fields) {
+
+          if (f.matches("\\d+")) {
+            instanceArgs = instanceArgs :+ new Integer(f.toInt)
+          } else {
+            instanceArgs = instanceArgs :+ f
+          }
+
+        }
 
         // use this constructor to get new instance with array as argument
 
-        program = program :+ inst.newInstance(fields).asInstanceOf[Instruction]
+        program = program :+ inst(0).newInstance(instanceArgs: _*).asInstanceOf[Instruction]
 
       }
     }

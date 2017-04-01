@@ -2,12 +2,7 @@ package sml
 
 case class LinInstruction(label: String, opcode: String, register: Int, value: Int) extends Instruction(label, opcode) {
 
-  // one arg constructor
 
-
-  def this(array: Array[String]) {
-    this(array(0), array(1), array(2).toInt, array(3).toInt)
-  }
 
 
 

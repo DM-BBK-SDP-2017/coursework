@@ -25,7 +25,7 @@ class ByteCodeParserImpl extends ByteCodeParser {
 
     var returnVector = Vector[ByteCode]()
 
-    List()
+    //List()
 
     // Set counter for while loop
 
@@ -34,13 +34,23 @@ class ByteCodeParserImpl extends ByteCodeParser {
     // A while loop to increment +2 to counter when iconst is detected to create a single instruction
     // with the second value as args. increments by +1 for other values
 
-    while (i < bc.length)  {
+    while (i < bc.length) {
+
+      // detect if current element of bc is an iconst, if so, use factory to create ByteCode with this and following element
+
       if (bc(i) == bytecode("iconst")) {
         returnVector :+ (ByteCodeFactoryImpl.make(bc(i), bc(i + 1).toInt))
+
+        // extra increment on counter to ignore the args of iconst
+
         i += 1
+
+        // add any other bytecode to vecot
+
       } else {
-        ByteCodeFactoryImpl.make((bc(i)))
+        returnVector :+ ByteCodeFactoryImpl.make((bc(i)))
       }
+
       i += 1
 
 
@@ -48,5 +58,7 @@ class ByteCodeParserImpl extends ByteCodeParser {
 
     returnVector
 
+
+  }
 
 }
