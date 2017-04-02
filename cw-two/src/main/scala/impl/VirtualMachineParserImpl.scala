@@ -4,7 +4,7 @@ import bc._
 import ByteCodes._
 import factory.VirtualMachineFactory
 import impl._
-import vendor._
+import vendor.{InvalidInstructionFormatException, _}
 import vm.VirtualMachineParser
 
 import scala.collection.immutable.VectorBuilder
@@ -38,9 +38,12 @@ class VirtualMachineParserImpl extends VirtualMachineParser with ByteCodeValues 
     */
   override def parse(file: String): Vector[ByteCode] = {
 
-    //returns Vector[Instruction]
+    // try / catch catches InvalidINstructionFormatException and rethrows as InvalidBytecodeException
 
-    parseHelper(VirtualMachineFactory.vendorParser.parse(file))
+    try {parseHelper(VirtualMachineFactory.vendorParser.parse(file))}
+    catch {
+      case ex: InvalidInstructionFormatException => throw new InvalidBytecodeException(ex.getMessage)
+    }
 
   //converter.parse(returnVector)
 }
@@ -56,12 +59,13 @@ class VirtualMachineParserImpl extends VirtualMachineParser with ByteCodeValues 
     * @return a vector of bytecodes
     */
   override def parseString(str: String): Vector[ByteCode] = {
-
-    parseHelper(VirtualMachineFactory.vendorParser.parseString(str))
+    try {parseHelper(VirtualMachineFactory.vendorParser.parseString(str))}
+    catch {
+      case ex: InvalidInstructionFormatException => throw new InvalidBytecodeException(ex.getMessage)
+    }
 
   }
 
-  //def
 
   def parseHelper(vectorOfInstructions: Vector[Instruction]): Vector[ByteCode] = {
 
@@ -70,8 +74,9 @@ class VirtualMachineParserImpl extends VirtualMachineParser with ByteCodeValues 
     for (b <- vectorOfInstructions)  {
 
       (b.name, b.args) match {
-        case ("iconst", a: Vector[Int]) => returnVector += (bytecode("iconst"), a(0).toByte)
-        case (a, _) => returnVector += bytecode(a)
+        case ("iconst", a: Vector[Int]) => returnVector = returnVector += (bytecode("iconst"), a(0).toByte)
+        case (a: String, _) if names.contains(a) => returnVector = returnVector += bytecode(a)
+        case (a: String, _ ) => throw new InvalidBytecodeException(s"Value $a is not supported!")
       }
       /*
         case ("isub", _) => new Isub

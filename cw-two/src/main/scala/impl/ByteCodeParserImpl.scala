@@ -2,6 +2,8 @@ package impl
 
 import bc.{ByteCode, ByteCodeParser, ByteCodeValues}
 
+import scala.collection.immutable.VectorBuilder
+
 /**
   * Created by dannymadell on 18/03/2017.
   */
@@ -15,50 +17,75 @@ class ByteCodeParserImpl extends ByteCodeParser {
     * @param bc a vector of bytes representing bytecodes
     * @return a vector of `ByteCode` objects
     */
-  override def parse(bc: Vector[Byte]): Vector[ByteCode] = {
+    override def parse(bc: Vector[Byte]): Vector[ByteCode] = {
 
-    /* This is allowable because the scaladoc for bytecode specifically says that all bytes are unique
+      /* This is allowable because the scaladoc for bytecode specifically says that all bytes are unique
 
-    val reverseMap = bytecode.map(_.swap)
+      val reverseMap = bytecode.map(_.swap)
 
-    */
+      */
 
-    var returnVector = Vector[ByteCode]()
+      var returnVector = new VectorBuilder[ByteCode]()
 
-    //List()
+      //List()
 
-    // Set counter for while loop
+      // Set counter for while loop
 
-    var i: Int = 0
+      var i: Int = 0
 
-    // A while loop to increment +2 to counter when iconst is detected to create a single instruction
-    // with the second value as args. increments by +1 for other values
+      // A while loop to increment +2 to counter when iconst is detected to create a single instruction
+      // with the second value as args. increments by +1 for other values
 
-    while (i < bc.length) {
+      print(bc.size)
+      while (i < bc.length) {
 
-      // detect if current element of bc is an iconst, if so, use factory to create ByteCode with this and following element
+        // detect if current element of bc is an iconst, if so, use factory to create ByteCode with this and following element
 
-      if (bc(i) == bytecode("iconst")) {
-        returnVector :+ (ByteCodeFactoryImpl.make(bc(i), bc(i + 1).toInt))
+        if (bc(i) == bytecode("iconst")) {
 
-        // extra increment on counter to ignore the args of iconst
+          returnVector += (ByteCodeFactoryImpl.make(bc(i), bc(i + 1).toInt))
+
+          // extra increment on counter to ignore the args of iconst
+
+          i += 1
+
+          // add any other bytecode to vecot
+
+        } else {
+
+          returnVector += ByteCodeFactoryImpl.make((bc(i)))
+        }
 
         i += 1
 
-        // add any other bytecode to vecot
 
-      } else {
-        returnVector :+ ByteCodeFactoryImpl.make((bc(i)))
       }
 
-      i += 1
+      returnVector.result()
 
 
     }
 
-    returnVector
+//  override def parse(bc: Vector[Byte]): Vector[ByteCode] = {
+//
+//    var returnVector: VectorBuilder[Byte] = new VectorBuilder[Byte]
+//
+//
+//  // sliding window of Vectors of 2
+//  var iconst = bytecode("iconst")
+//
+//      for (b <- bc.sliding(2).map(x => x.toVector)) {
+//        b match {
+//          case (iconst, arg: Byte) => returnVector += (iconst, arg)
+//          case (arg,_) => returnVector += arg
+//        }
+//      }
+//      //ByteCodeFactoryImpl.make(b)}
+//    returnVector
+//
+//
+//      //returnVector.result()
+//  }
 
-
-  }
 
 }

@@ -7,7 +7,13 @@ import vm.VirtualMachine
 /**
   * Created by dannymadell on 18/03/2017.
   */
-class VirtualMachineImpl(var stack: Vector[Int]) extends VirtualMachine with ByteCodeValues {
+class VirtualMachineImpl(stack: Vector[Int]) extends VirtualMachine with ByteCodeValues {
+
+
+
+
+
+
   /**
     * Executes a vector of bytecodes.
     *
@@ -19,6 +25,9 @@ class VirtualMachineImpl(var stack: Vector[Int]) extends VirtualMachine with Byt
     * @return a new virtual machine
     */
   override def execute(bc: Vector[ByteCode]): VirtualMachine = {
+
+    // THIS DOESN'T WORK, SOME SORT OF FOLDING SOLUTION?
+
     //bc.foreach(x => executeOne(x))
     var returnVm: VirtualMachine = VirtualMachineFactory.virtualMachine
     if (bc.isEmpty) {returnVm = this}
@@ -43,7 +52,12 @@ class VirtualMachineImpl(var stack: Vector[Int]) extends VirtualMachine with Byt
     * @return a tuple of a new vector of bytecodes and virtual machine
     */
   override def executeOne(bc: Vector[ByteCode]): (Vector[ByteCode], VirtualMachine) = {
-    (bc.drop(1), bc.head.execute(this))
+
+
+    //stack.foreach(x => println("stack values -> " + x))
+    //println("head " + stack.head)
+    var returnVM = bc.head.execute(this)
+    (bc.drop(1), returnVM)
 
   }
 
@@ -54,8 +68,8 @@ class VirtualMachineImpl(var stack: Vector[Int]) extends VirtualMachine with Byt
     * @return a new virtual machine with the integer `value` pushed
     */
   override def push(value: Int): VirtualMachine = {
-    stack.+:(value)
-    this
+   new VirtualMachineImpl(value +: stack)
+
 
 
   }
@@ -69,9 +83,8 @@ class VirtualMachineImpl(var stack: Vector[Int]) extends VirtualMachine with Byt
   override def pop(): (Int, VirtualMachine) = {
 
     //Don't like this, not very idiomatic to scala?
-    val returnInt = stack.head
-    stack.drop(1)
-    (returnInt, this)
+
+    (stack.head, new VirtualMachineImpl(stack.drop(1)))
 
   }
 

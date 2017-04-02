@@ -22,9 +22,10 @@ class Iadd extends ByteCode {
     */
   override def execute(vm: VirtualMachine): VirtualMachine = {
 
-    val (val1, _) = vm.pop()
-    val (val2, _) = vm.pop()
-    vm.push(val1 + val2)
+    val (val1, vm1) = vm.pop()
+    val (val2, vm2) = vm1.pop()
+
+    vm2.push(val1 + val2)
 
 
 

@@ -1,5 +1,7 @@
 package impl
 
+import bc.ByteCodeValues
+import com.sun.org.apache.bcel.internal.generic.InstructionList
 import vendor.{Instruction, InvalidInstructionFormatException, ProgramParser}
 
 import scala.io.Source
@@ -7,9 +9,9 @@ import scala.io.Source
 /**
   *
   */
-class ProgramParserImpl extends ProgramParser {
+class ProgramParserImpl extends ProgramParser with ByteCodeValues {
 
-    var instructionList: InstructionList = Vector[Instruction]()
+
 
   /**
     * Parses a file representation of a bytecode program
@@ -20,20 +22,23 @@ class ProgramParserImpl extends ProgramParser {
     */
   override def parse(file: String): InstructionList = {
 
+    var instructionList: InstructionList = Vector[Instruction]()
+
     // Get input file and convert to Iterator
 
     val sourceFileLines = Source.fromFile(file).getLines()
 
     // Initialise Array (required for parseHelper
 
-    var arrayOfFileLines = Array[String]()
+    var arrayOfFileLines = sourceFileLines.toArray
 
     // Copy input file iterator to new array
 
-    sourceFileLines.copyToArray(arrayOfFileLines)
+    //sourceFileLines.toArray()
 
     // pass to parseHelper, returns the InstructionList
 
+    println(arrayOfFileLines.length + "FILELENGTH")
     parseHelper(arrayOfFileLines)
 
   }
@@ -70,28 +75,38 @@ class ProgramParserImpl extends ProgramParser {
     * @return an instruction list
     */
   def parseHelper(fileLines: Array[String]): InstructionList = {
-    var acceptableInstructions = Array(
-      "iadd", "isub", "imul", "idiv", "irem", "ineg", "iinc", "idec", "idup", "iswap", "print")
 
     // brackets around /d+ allow us to pattern match passing through the iconst digits as args
     val Pattern =
       """iconst\s(\d+)""".r
 
-    for (line <- fileLines) {
-      line match { // not all here
-        case "isub" => instructionList = instructionList :+ new vendor.Instruction("isub", Vector[Int]());
-        case "irem" => instructionList = instructionList :+ new vendor.Instruction("irem", Vector[Int]());
-        case "ineg" => instructionList = instructionList :+ new vendor.Instruction("ineg", Vector[Int]());
-        case "iinc" => instructionList = instructionList :+ new vendor.Instruction("iinc", Vector[Int]());
-        case "idec" => instructionList = instructionList :+ new vendor.Instruction("idec", Vector[Int]());
-        case "idup" => instructionList = instructionList :+ new vendor.Instruction("idup", Vector[Int]());
-        case "iswap" => instructionList = instructionList :+ new vendor.Instruction("iswap", Vector[Int]());
-        case "print" => instructionList = instructionList :+ new vendor.Instruction("print", Vector[Int]());
-        case Pattern(args) => instructionList = instructionList :+ new vendor.Instruction("iconst", Vector[Int](args.toInt));
-        case line => throw new InvalidInstructionFormatException("Invalid instruction: " + line);
-      }
-    }
+    var instructionList: InstructionList = Vector[Instruction]()
 
+      for (line <- fileLines) {
+
+        //println(line)
+
+
+        line match {
+         //        case "isub" => instructionList = instructionList :+ new vendor.Instruction("isub", Vector[Int]());
+         //        case "iadd" => instructionList = instructionList :+ new vendor.Instruction("iadd", Vector[Int]());
+         //        case "idiv" => instructionList = instructionList :+ new vendor.Instruction("idiv", Vector[Int]());
+         //        case "imul" => instructionList = instructionList :+ new vendor.Instruction("imul", Vector[Int]());
+         //        case "irem" => instructionList = instructionList :+ new vendor.Instruction("irem", Vector[Int]());
+         //        case "ineg" => instructionList = instructionList :+ new vendor.Instruction("ineg", Vector[Int]());
+         //        case "iinc" => instructionList = instructionList :+ new vendor.Instruction("iinc", Vector[Int]());
+         //        case "idec" => instructionList = instructionList :+ new vendor.Instruction("idec", Vector[Int]());
+         //        case "idup" => instructionList = instructionList :+ new vendor.Instruction("idup", Vector[Int]());
+         //        case "iswap" => instructionList = instructionList :+ new vendor.Instruction("iswap", Vector[Int]());
+         //        case "print" => instructionList = instructionList :+ new vendor.Instruction("print", Vector[Int]());
+
+          case Pattern(args) => instructionList = instructionList :+  new vendor.Instruction("iconst", Vector[Int](args.toInt))
+          case acceptableArg if (names.contains(line)) => instructionList = instructionList :+ new vendor.Instruction(acceptableArg, Vector[Int]())
+          case anythingElse => throw new InvalidInstructionFormatException(anythingElse + " is not recognised!")
+
+        }
+    }
+    //println(instructionList.size + "SIZE")
     instructionList
   }
 
