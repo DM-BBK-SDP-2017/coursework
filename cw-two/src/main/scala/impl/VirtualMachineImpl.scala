@@ -29,15 +29,34 @@ class VirtualMachineImpl(stack: Vector[Int]) extends VirtualMachine with ByteCod
     // THIS DOESN'T WORK, SOME SORT OF FOLDING SOLUTION?
 
     //bc.foreach(x => executeOne(x))
-    var returnVm: VirtualMachine = VirtualMachineFactory.virtualMachine
+
+    /*case v: Vector[ByteCode] if !v.isEmpty => {
+      val (v, vm) = executeOne(bc)
+      vm.execute(v)
+      vm
+    }*/
+
+this
+
+    //VirtualMachineFactory.virtualMachine
+
+  }
+
+
+
+
+
+
+
+    /*var returnVm: VirtualMachine = VirtualMachineFactory.virtualMachine
     if (bc.isEmpty) {returnVm = this}
     else if (!bc.isEmpty) {
       returnVm = executeOne(bc)._2
     }
 
-    returnVm
+    returnVm*/
 
-  }
+
 
   /**
     * Executes the next bytecode in the vector of bytecodes.
