@@ -21,4 +21,5 @@ class PublicByteCodeParserSuite extends FunSuite with ByteCodeValues {
     assert(bc(1).code == bytecode("iconst"))
     assert(bc(2).code == bytecode("iadd"))
   }
+
 }

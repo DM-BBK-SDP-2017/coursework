@@ -59,4 +59,75 @@ class PublicVirtualMachineSuite extends FunSuite {
     next = next._2.executeOne(next._1)
     assert(next._2.state.head == 15)
   }
+
+  test("[2] idiv should work correctly") {
+    val bc  = vmp.parseString("iconst 5\niconst 15\nidiv")
+    var next = vm.executeOne(bc)
+    assert(next._2.state.head == 5)
+    next = next._2.executeOne(next._1)
+    assert(next._2.state.head == 15)
+    next = next._2.executeOne(next._1)
+    assert(next._2.state.head == 3)
+  }
+
+  test("[2] idup should work correctly") {
+    val bc  = vmp.parseString("iconst 1\niconst 2\nidup")
+    var next = vm.executeOne(bc)
+    assert(next._2.state.head == 1)
+    next = next._2.executeOne(next._1)
+    assert(next._2.state.head == 2)
+    next = next._2.executeOne(next._1)
+    assert(next._2.state(0) == 2)
+    assert(next._2.state(1) == 2)
+    assert(next._2.state(2) == 1)
+
+  }
+
+  test("[2] idec should work correctly") {
+    val bc = vmp.parseString("iconst 5\nidec\nidec")
+    val vm2 = vm.execute(bc)
+    assert(vm2.state(0) == 3)
+  }
+
+  test("[2] iinc should work correctly") {
+    val bc = vmp.parseString("iconst 5\niinc\niinc")
+    val vm2 = vm.execute(bc)
+    assert(vm2.state(0) == 7)
+  }
+
+  test("[2] ineg should work correctly") {
+    val bc = vmp.parseString("iconst 5\nineg")
+    val vm2 = vm.execute(bc)
+    assert(vm2.state(0) == -5)
+  }
+
+  test("[2] irem should work correctly") {
+    val bc  = vmp.parseString("iconst 5\niconst 11\nirem")
+    var next = vm.executeOne(bc)
+    assert(next._2.state.head == 5)
+    next = next._2.executeOne(next._1)
+    assert(next._2.state.head == 11)
+    next = next._2.executeOne(next._1)
+    assert(next._2.state(0) == 1)
+
+  }
+
+  test("[11] execute should work correctly") {
+    val bc  = vmp.parseString("iconst 9\niconst 9\niconst 9\niadd\niadd")
+    val vm2 = vm.execute(bc)
+    assert(vm2.state(0) == 27)
+  }
+
+  test("[12] multiple instructions should work correctly") {
+    val bc  = vmp.parseString("iconst 2\niconst 3\niconst 4\nisub\niadd")
+    val vm2 = vm.execute(bc)
+    assert(vm2.state(0) == 3)
+  }
+
+  test("[12] multiple instructions should work correctly 2") {
+      val bc  = vmp.parseString("iconst 2\niconst 3\niconst 4\nisub\niadd\nineg\nidec\nidec\niinc\nineg\niconst 8\nidiv\niconst 6\nimul\niconst 8\niswap\nisub\niconst 14\nirem\nidup\niadd")
+      val vm2 = vm.execute(bc)
+      assert(vm2.state(0) == 4)
+      }
+
 }

@@ -32,4 +32,13 @@ class PublicVirtualMachineParserSuite extends FunSuite with ByteCodeValues {
       val code = vmp.parse("programs/p04-bad-program.vm")
     }
   }
+
+
+
+  test("[4a] vm parser should parse empty string gracefully") {
+    val insts = vmp.parseString("")
+    assert(insts.length == 0)
+  }
+
+
 }

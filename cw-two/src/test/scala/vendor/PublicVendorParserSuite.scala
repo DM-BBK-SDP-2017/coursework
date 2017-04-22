@@ -22,4 +22,11 @@ class PublicVendorParserSuite extends FunSuite {
       assert(insts(i).name == all(i))
     }
   }
+
+
+  test("[4a] vendor parser should parse empty string gracefully") {
+    val insts = vp.parseString("")
+    assert(insts.length == 0)
+  }
+
 }
