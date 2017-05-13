@@ -45,7 +45,7 @@ class VirtualMachineImpl(stack: Vector[Int]) extends VirtualMachine with ByteCod
     */
   override def executeOne(bc: Vector[ByteCode]): (Vector[ByteCode], VirtualMachine) = {
 
-    var returnVM = bc.head.execute(this)
+    val returnVM = bc.head.execute(this)
     (bc.drop(1), returnVM)
 
   }
