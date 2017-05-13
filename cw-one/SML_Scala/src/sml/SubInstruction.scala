@@ -1,14 +1,16 @@
 package sml
 
 /**
-  * Created by dannymadell on 11/02/2017.
-  */
-class SubInstruction(label: String, op: String, val result: Int, val op1: Int, val op2: Int)
+  *
+  * A class for subtracting
+  *
+  * @param label the instruction identifier
+  * @param op the instruction name
+  * @param result result of op
+  * @param op1 operand 1
+  * @param op2 operand 2  */
+case class SubInstruction(label: String, op: String, val result: Int, val op1: Int, val op2: Int)
   extends Instruction(label, op) {
-
-  // one arg constructor
-
-
 
 
   override def execute(m: Machine) {
@@ -19,7 +21,7 @@ class SubInstruction(label: String, op: String, val result: Int, val op1: Int, v
   }
 
   override def toString(): String = {
-    super.toString + " " + op1 + " + " + op2 + " to " + result + "\n"
+    super.toString + " " + op1 + " - " + op2 + " to " + result + "\n"
   }
 }
 

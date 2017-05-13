@@ -1,14 +1,16 @@
 package sml
 
-
-class AddInstruction(label: String, op: String, val result: Int, val op1: Int, val op2: Int)
+/**
+  * An adding class
+  *
+  * @param label the instruction identifier
+  * @param op the instruction name
+  * @param result result of op
+  * @param op1 operand 1
+  * @param op2 operand 2
+  */
+case class AddInstruction(label: String, op: String, val result: Int, val op1: Int, val op2: Int)
   extends Instruction(label, op) {
-
-
-  // One arg constructor
-
-
-
 
 
 

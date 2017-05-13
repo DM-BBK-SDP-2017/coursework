@@ -1,35 +1,34 @@
 package sml
 
+import scala.io.Source
+
 /*
  * The translator of a <b>S</b><b>M</b>al<b>L</b> program.
+ * @param fileName the path of the file being parsed
  */
 class Translator(fileName: String) {
 
-  // Not sure whether spec allows us to remove these but they are now redundant with reflection
-
-  private final val ADD = "add"
-  private final val LIN = "lin"
-  private final val BNZ = "bnz"
-  private final val MUL = "mul"
-  private final val SUB = "sub"
-  private final val OUT = "out"
-  private final val DIV = "div"
 
   /**
     * translate the small program in the file into lab (the labels) and prog (the program)
     */
   def readAndTranslate(m: Machine): Machine = {
+
     val labels = m.labels
     var program = m.prog
-    import scala.io.Source
-    val lines = Source.fromFile(fileName).getLines
 
     // Begin for loop to add instructions to 'program' array
 
-    for (line <- lines) {
-      val fields = line.split(" ")
+    for (line <- Source.fromFile(fileName).getLines) {
 
+        // get array of strings from the file line
+
+      val fields: Array[String] = line.split("[\\s]+")
+
+      // validate that array isn't empty with if statement, allows empty lines to be skipped
       if (fields.length > 0) {
+
+        // add label to labels array
         labels.add(fields(0))
 
         // retrieve op code and use to derive Class to instantiate
@@ -38,32 +37,37 @@ class Translator(fileName: String) {
         // ones give in the original spec e.g. instruction name (with capital first letter) + Instruction and are placed
         // into the same package
 
-        val className = "sml." + fields(1).charAt(0).toUpper + fields(1).substring(1) + "Instruction"
+        val className: String = "sml." + fields(1).charAt(0).toUpper + fields(1).substring(1) + "Instruction"
 
-        // use derived classname to get constructor that accepts a Array[String]
+        // try/catch in case class isn't found
 
-        val inst = Class.forName(className).getConstructors()
+        try {
 
+          // use derived classname to get constructor that accepts a Array[String]
 
-        var instanceArgs: Array[Object] = new Array[Object](0)
+          val instructionClassConstructor = Class.forName(className).getConstructors()(0)
 
-        for (f <- fields) {
+          // loop through fields and add strings and integers (if they match the pattern) to new array
 
-          if (f.matches("\\d+")) {
-            instanceArgs = instanceArgs :+ new Integer(f.toInt)
-          } else {
-            instanceArgs = instanceArgs :+ f
+          var instanceArgs: Array[Object] = for (f <- fields) yield f match {
+
+            case fieldString: String if fieldString.matches("\\d+") => new Integer(fieldString.toInt)
+            case fieldString: String => fieldString
+
           }
 
+          // use this constructor to get new instance with array as argument
+
+          program = program :+ instructionClassConstructor.newInstance(instanceArgs: _*).asInstanceOf[Instruction]
+        } catch {
+          case ex: Exception => ex.printStackTrace()
         }
-
-        // use this constructor to get new instance with array as argument
-
-        program = program :+ inst(0).newInstance(instanceArgs: _*).asInstanceOf[Instruction]
-
       }
     }
+
+    // return Machine with labels and program populated
     new Machine(labels, program)
+
   }
 }
 

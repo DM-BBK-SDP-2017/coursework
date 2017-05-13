@@ -1,15 +1,16 @@
 package sml
 
 /**
-  * Created by dannymadell on 11/02/2017.
-  */
-class MulInstruction(label: String, op: String, val result: Int, val op1: Int, val op2: Int)
+  *
+  * A class for mutiplying with the machine
+  * @param label the instruction identifier
+  * @param op the instruction name
+  * @param result result of op
+  * @param op1 operand 1
+  * @param op2 operand 2
+  * */
+case class MulInstruction(label: String, op: String, val result: Int, val op1: Int, val op2: Int)
   extends Instruction(label, op) {
-
-  // one arg constructor
-
-
-
 
   override def execute(m: Machine) {
     val value1 = m.regs(op1)

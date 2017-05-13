@@ -1,12 +1,15 @@
 package sml
 
 /**
-  * Created by dannymadell on 11/02/2017.
+  * A bnz class
+  *
+  * @param label the instruction identifier
+  * @param opcode name of instruction
+  * @param register result of op
+  * @param altInst instruction to return to if register != 0
   */
-class BnzInstruction (label: String, opcode: String, register: Int, altInst: String)
+case class BnzInstruction (label: String, opcode: String, register: Int, altInst: String)
   extends Instruction(label, opcode) {
-
-  // one arg constructor f5 bnz 20 f3
 
 
 
@@ -20,7 +23,7 @@ class BnzInstruction (label: String, opcode: String, register: Int, altInst: Str
 
 
   override def toString(): String = {
-    super.toString + " " + register + "\n"
+    super.toString + " bnz " + register + "\n"
   }
 }
 
